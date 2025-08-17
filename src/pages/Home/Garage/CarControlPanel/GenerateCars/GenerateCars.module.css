@@ -1,0 +1,6 @@
+.wrapper {
+  button {
+    color: var(--col-light);
+    border-color: var(--col-secondary);
+  }
+}

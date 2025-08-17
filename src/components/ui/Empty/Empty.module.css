@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100dvh - 489px);
+
+  h1 {
+    color: var(--col-light);
+    font-size: clamp(2rem,5vw,3rem);
+  }
+
+  @media (max-width: 600px) {
+    min-height: calc(70dvh - 189px);
+  }
+}
+
+.icon {
+  width: clamp(10rem,10vw,15rem);
+
+  svg {
+    height: 100%;
+    width: 100%;
+    fill: var(--col-light);
+    color:var(--col-light-secondary)
+  }
+}

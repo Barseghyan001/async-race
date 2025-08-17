@@ -1,0 +1,20 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+    button {
+      color:var(--col-light-secondary);
+      border-color:var(--col-light-secondary)
+    }
+
+  input[type='text'] {
+    height: 2rem;
+    border-radius: 0.6rem;
+    border:none;
+    outline: none;
+    padding: 0.3rem;
+  }
+
+}
+

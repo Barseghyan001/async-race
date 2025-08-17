@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+
+  &:hover {
+    filter:brightness(1.8);
+  }
+}
+
+.container {
+  margin: 0 auto;
+  width: 96%;
+}

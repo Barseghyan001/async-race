@@ -1,0 +1,17 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap:0.5rem
+}
+
+.row {
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  gap:0.5rem;
+  justify-content: space-between;
+
+  h1 {
+    color: var(--col-quaternary);
+  }
+}

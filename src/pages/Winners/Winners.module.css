@@ -1,0 +1,8 @@
+.wrapper {
+  padding: 1rem 0;
+
+  h1 {
+    color:var(--col-light-secondary);
+    font-size:clamp(2rem,5vw,3rem);
+  }
+}

@@ -1,0 +1,30 @@
+.wrapper {
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:2rem;
+
+  h1 {
+    color: var(--col-light);
+    font-size: clamp(3rem,5vw,4rem);
+  }
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+    color: var(--col-light);
+  }
+
+}
+
+.link {
+  border: 1px solid var(--col-light-secondary);
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--col-light);
+  border-radius: 1rem;
+}

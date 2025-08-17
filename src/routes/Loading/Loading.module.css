@@ -1,0 +1,14 @@
+.wrapper {
+  width: 100%;
+  height: calc(100dvh - 223px);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+
+  &::before {
+    content:'Loading...';
+    color:var(--col-light-primary);
+    font-size:clamp(3rem,5vw,4rem);
+  }
+}

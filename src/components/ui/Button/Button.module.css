@@ -1,0 +1,21 @@
+.button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+}
+
+.button--outline {
+  border: 1px solid inherit;
+  color: inherit;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.1;
+}
+
+

@@ -1,0 +1,40 @@
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+.page,
+.previous,
+.next {
+  padding: 0.3rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageLink {
+  display: block;
+  padding: 0.4rem 0.8rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+
+}
+
+.active .pageLink {
+  background: var(--col-primary);
+  color: white;
+  border-color: var(--col-primary);
+  border-radius: 0.5rem;
+}
+
+.disabled .pageLink {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,21 @@
+@import "normalize.css";
+
+:root {
+  --col-light:#ffff;
+  --col-primary:rgb(127, 0, 255);
+  --col-secondary:rgb(255, 128, 0);
+  --col-quaternary:rgb(255, 0, 255);
+  --col-light-primary:rgb(0, 255, 128);
+  --col-light-secondary:rgb(0, 102, 204);
+
+}
+
+ body {
+   background-image: url('../assets/images/bg-image.webp');
+   background-position: 50% 50%;
+ }
+
+ .dontScroll {
+   overflow: hidden;
+ }
+
