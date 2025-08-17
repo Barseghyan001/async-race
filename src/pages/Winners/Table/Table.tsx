@@ -9,7 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/useReduxHooks.ts'
 import { winnersSliceSelectors } from '../../../store/winnersSlice/winnersSlice.ts';
 
 const Table = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<number>(0);
+  const [sortedBy, setSortedBy] = useState<string>('');
   const winners = useAppSelector(winnersSliceSelectors.selectorWinners);
   const loading = useAppSelector(winnersSliceSelectors.selectorWinnersLoading);
   const dispatch = useAppDispatch();
@@ -18,24 +19,34 @@ const Table = () => {
     setPage(selected);
   };
 
+  const handleSortedBy = (type: string) => {
+    setSortedBy(type);
+  };
+
   const displayedWinners = useMemo(() => {
     return winners.slice(page * 7, page * 7 + 7);
   }, [winners, page]);
 
   useEffect(() => {
-    dispatch(getWinnersThunk(page));
-  }, []);
+    dispatch(getWinnersThunk({ page, sort: sortedBy }));
+  }, [sortedBy]);
 
   return (
     <>
       {loading && <TableSkeleton />}
       <ul className={styles.wrapper}>
         <li className={`${styles.item} ${styles[`item--info`]}`}>
-          <div>No</div>
+          <div role="button" onClick={() => handleSortedBy('id')}>
+            No
+          </div>
           <div>Car</div>
           <div>Name</div>
-          <div>Wins</div>
-          <div>Best Time (seconds)</div>
+          <div role="button" onClick={() => handleSortedBy('wins')}>
+            Wins
+          </div>
+          <div role="button" onClick={() => handleSortedBy('time')}>
+            Best Time (seconds)
+          </div>
         </li>
         {displayedWinners.map(winner => (
           <Item key={winner.id} {...winner} />

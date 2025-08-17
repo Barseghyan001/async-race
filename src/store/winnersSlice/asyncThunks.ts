@@ -7,35 +7,36 @@ const MAX_WINNERS_LIMIT = 100;
 const PORT = import.meta.env.VITE_SERVER_REQUEST_PORT || 3000;
 const HOST = `http://localhost:${PORT}/`;
 
-export const getWinnersThunk = createAsyncThunk<IWinners[], number, { rejectValue: string }>(
-  'winners/get',
-  async (page, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(
-        `${HOST}winners?_page=${page + 1}&_limit=${MAX_WINNERS_LIMIT}&_sort=time`
-      );
-      if (!response.ok) {
-        throw new Error('Something went wrong!');
-      }
-      const winners = await response.json();
-
-      const cars = await dispatch(getCarsThunk(0)).unwrap();
-
-      const newData = winners.map((winner: IWinners) => {
-        const car = cars.find(c => c.id === winner.id);
-        return car ? { ...winner, name: car.name, color: car.color } : winner;
-      });
-
-      return newData;
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error(err.message);
-        rejectWithValue(err.message);
-      }
-      rejectWithValue('Something went wrong!');
+export const getWinnersThunk = createAsyncThunk<
+  IWinners[],
+  { page: number; sort: string },
+  { rejectValue: string }
+>('winners/get', async ({ page, sort }, { rejectWithValue, dispatch }) => {
+  try {
+    const response = await fetch(
+      `${HOST}winners?_page=${page + 1}&_limit=${MAX_WINNERS_LIMIT}&_sort=${sort}`
+    );
+    if (!response.ok) {
+      throw new Error('Something went wrong!');
     }
+    const winners = await response.json();
+
+    const cars = await dispatch(getCarsThunk(0)).unwrap();
+
+    const newData = winners.map((winner: IWinners) => {
+      const car = cars.find(c => c.id === winner.id);
+      return car ? { ...winner, name: car.name, color: car.color } : winner;
+    });
+
+    return newData;
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      rejectWithValue(err.message);
+    }
+    rejectWithValue('Something went wrong!');
   }
-);
+});
 
 export const createWinnersThunk = createAsyncThunk<IWinners, Winner, { rejectValue: string }>(
   'winners/create',

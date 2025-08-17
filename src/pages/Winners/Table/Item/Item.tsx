@@ -9,7 +9,9 @@ const Item: FC<Props> = ({ id, color, name, wins, time }) => {
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteWinnersThunk(id)).then(() => dispatch(getWinnersThunk(0)));
+    dispatch(deleteWinnersThunk(id)).then(() =>
+      dispatch(getWinnersThunk({ page: 0, sort: 'time' }))
+    );
   };
 
   return (
