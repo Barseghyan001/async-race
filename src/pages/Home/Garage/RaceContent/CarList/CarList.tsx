@@ -41,10 +41,10 @@ const CarList: FC<Props> = ({ data }) => {
         {data.map(item => (
           <CarItem key={item.id} {...item} />
         ))}
-        <div className={`${styles.image} ${styles[`image--finish`]}`}>
-          <img src={finishImage} alt="finishImage" />
-        </div>
       </ul>
+      <div className={`${styles.image} ${styles[`image--finish`]}`}>
+        <img src={finishImage} alt="finishImage" />
+      </div>
       {open &&
         createPortal(
           <Modal onClose={handleClose} open={open}>
