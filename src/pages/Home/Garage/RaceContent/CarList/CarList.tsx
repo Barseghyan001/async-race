@@ -11,10 +11,15 @@ import {
 import { finishImage } from '../../../../../assets/images';
 import Modal from '../../../../../components/ui/Modal/Modal.tsx';
 import { updateWinnerThunk } from '../../../../../store/winnersSlice/asyncThunks.ts';
+import { carsSliceSelectors } from '../../../../../store/carsSlice/carsSlice.ts';
 
 const CarList: FC<Props> = ({ data }) => {
   const [open, setOpen] = useState(false);
+  const cars = useAppSelector(carsSliceSelectors.selectorCar);
   const winner = useAppSelector(winnersSliceSelectors.selectorWinner);
+
+  const currentWinner = cars.find(item => item.id === winner?.id);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -44,7 +49,7 @@ const CarList: FC<Props> = ({ data }) => {
         createPortal(
           <Modal onClose={handleClose} open={open}>
             <h5>🏆 Winner!</h5>
-            <p>{winner?.name} reached the finish line!</p>
+            <p>{currentWinner?.name} reached the finish line!</p>
             <p>Time: {winner?.time.toFixed(2)}s</p>
           </Modal>,
           document.body

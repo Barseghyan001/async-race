@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../hooks/useReduxHoo
 import { useEffect, useState } from 'react';
 import {
   createWinnersThunk,
+  deleteWinnersThunk,
   getWinnerThunk,
 } from '../../../../../store/winnersSlice/asyncThunks.ts';
 import type { Props } from './CarItem.types.ts';
@@ -24,7 +25,9 @@ export const useControlCars = ({ id, name, color }: Props) => {
   const allCarsStarted = useAppSelector(carsSliceSelectors.selectorAllCarsStarted);
 
   const handleRemoveCar = () => {
-    dispatch(deleteCarThunk(id)).then(() => dispatch(getCarsThunk(0)));
+    dispatch(deleteCarThunk(id))
+      .then(() => dispatch(getCarsThunk(0)))
+      .then(() => dispatch(deleteWinnersThunk(id)));
   };
 
   const handleSelectCar = () => {

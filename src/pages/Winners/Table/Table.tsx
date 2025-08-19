@@ -24,7 +24,7 @@ const Table = () => {
   };
 
   const displayedWinners = useMemo(() => {
-    return winners.slice(page * 7, page * 7 + 7);
+    return winners?.slice(page * 7, page * 7 + 7);
   }, [winners, page]);
 
   useEffect(() => {
@@ -48,14 +48,14 @@ const Table = () => {
             Best Time (seconds)
           </div>
         </li>
-        {displayedWinners.map(winner => (
+        {displayedWinners?.map(winner => (
           <Item key={winner.id} {...winner} />
         ))}
-        {!displayedWinners.length && !loading && <Empty text="No Winners found!" />}
+        {!winners?.length && !loading && <Empty text="No Winners found!" />}
       </ul>
-      {!!winners.length && (
+      {!!winners?.length && (
         <Pagination
-          pageCount={Math.ceil(winners.length / 7)}
+          pageCount={Math.ceil(winners?.length / 7)}
           forcePage={page}
           onPageChange={handlePageChange}
         />

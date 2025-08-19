@@ -20,7 +20,7 @@ const randomColor = () => {
 };
 
 const generateCars = async (dispatch: Dispatch) => {
-  const cars: Car[] = Array.from({ length: 10 }, () => ({
+  const cars: Car[] = Array.from({ length: 100 }, () => ({
     name: randomCarName(),
     color: randomColor(),
   }));
