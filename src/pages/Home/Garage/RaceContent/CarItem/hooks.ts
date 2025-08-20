@@ -24,6 +24,7 @@ export const useControlCars = ({ id, name, color }: Props) => {
   const dispatch = useAppDispatch();
   const velocity = useAppSelector(carsSliceSelectors.selectorSelectedVelocity);
   const allCarsStarted = useAppSelector(carsSliceSelectors.selectorAllCarsStarted);
+  const cars = useAppSelector(carsSliceSelectors.selectorCar);
 
   const distance = Math.floor(position - 130);
 
@@ -37,7 +38,7 @@ export const useControlCars = ({ id, name, color }: Props) => {
     dispatch(carsActions.setSelectedCar({ name, color, id }));
   };
 
-  const handleStop = async () => {
+  const handleStop = () => {
     dispatch(engineStopThunk(id));
     setSelectedId(null);
     setAnimation(false);
@@ -58,8 +59,12 @@ export const useControlCars = ({ id, name, color }: Props) => {
     }
   };
 
-  const handleStart = () => {
-    dispatch(engineStartThunk(id));
+  const handleStart = async () => {
+    if (allCarsStarted) {
+      await Promise.all(cars.map(car => dispatch(engineStartThunk(car.id))));
+    } else {
+      dispatch(engineStartThunk(id));
+    }
     setSelectedId(id);
     dispatch(engineDriveThunk(id));
     calculateDistance();
