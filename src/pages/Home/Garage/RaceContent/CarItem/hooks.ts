@@ -7,7 +7,7 @@ import {
 } from '../../../../../store/carsSlice/asyncThunks.ts';
 import { carsActions, carsSliceSelectors } from '../../../../../store/carsSlice/carsSlice.ts';
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/useReduxHooks.ts';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   createWinnersThunk,
   deleteWinnersThunk,
@@ -17,12 +17,15 @@ import type { Props } from './CarItem.types.ts';
 
 export const useControlCars = ({ id, name, color }: Props) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [transitionEnabled, setTransitionEnabled] = useState<boolean>(true);
+  const [animation, setAnimation] = useState<boolean>(false);
   const [position, setPosition] = useState<number>(0);
+  const liRef = useRef<HTMLLIElement>(null);
+  const carRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const distance = useAppSelector(carsSliceSelectors.selectorSelectedDistance);
   const velocity = useAppSelector(carsSliceSelectors.selectorSelectedVelocity);
   const allCarsStarted = useAppSelector(carsSliceSelectors.selectorAllCarsStarted);
+
+  const distance = Math.floor(position - 130);
 
   const handleRemoveCar = () => {
     dispatch(deleteCarThunk(id))
@@ -34,20 +37,40 @@ export const useControlCars = ({ id, name, color }: Props) => {
     dispatch(carsActions.setSelectedCar({ name, color, id }));
   };
 
+  const handleStop = async () => {
+    dispatch(engineStopThunk(id));
+    setSelectedId(null);
+    setAnimation(false);
+    dispatch(carsActions.setCarsStarted(false));
+    setPosition(0);
+  };
+
+  const calculateDistance = () => {
+    if (liRef.current && carRef.current) {
+      const liRect = liRef.current.getBoundingClientRect();
+      const carRect = carRef.current.getBoundingClientRect();
+      const style = getComputedStyle(liRef.current);
+      const paddingLeft = parseFloat(style.paddingLeft);
+      const paddingRight = parseFloat(style.paddingRight);
+
+      const maxDistance = liRect.width - carRect.width - paddingLeft - paddingRight;
+      setPosition(maxDistance > 0 ? maxDistance : 0);
+    }
+  };
+
   const handleStart = () => {
     dispatch(engineStartThunk(id));
     setSelectedId(id);
     dispatch(engineDriveThunk(id));
+    calculateDistance();
+    setAnimation(true);
   };
 
-  const handleStop = async () => {
-    dispatch(engineStopThunk(id));
-    setSelectedId(null);
-    setTransitionEnabled(false);
-    dispatch(carsActions.setCarsStarted(false));
-    setPosition(0);
-    setTimeout(() => setTransitionEnabled(true), 0);
-  };
+  useEffect(() => {
+    calculateDistance();
+    window.addEventListener('resize', calculateDistance);
+    return () => window.removeEventListener('resize', calculateDistance);
+  }, []);
 
   useEffect(() => {
     if (allCarsStarted) {
@@ -57,13 +80,8 @@ export const useControlCars = ({ id, name, color }: Props) => {
 
   useEffect(() => {
     if (selectedId === id && distance > 0 && velocity > 0) {
-      const speedFactor = 0.9;
+      const speedFactor = 50;
       const travelTime = Math.floor((distance / velocity) * speedFactor);
-      setPosition(0);
-      const animationTimeout = setTimeout(() => {
-        setPosition(distance);
-      }, 0);
-
       const finishTimeout = setTimeout(() => {
         setSelectedId(null);
         dispatch(createWinnersThunk({ time: travelTime, wins: 1, id })).then(() =>
@@ -72,22 +90,22 @@ export const useControlCars = ({ id, name, color }: Props) => {
       }, travelTime);
 
       return () => {
-        clearTimeout(animationTimeout);
         clearTimeout(finishTimeout);
       };
     }
   }, [selectedId, distance, velocity, id, dispatch, name, color, allCarsStarted]);
 
   return {
+    velocity,
+    distance,
+    carRef,
+    liRef,
     selectedId,
     allCarsStarted,
-    distance,
-    velocity,
     onStart: handleStart,
     onRemoveCar: handleRemoveCar,
     onSelectCar: handleSelectCar,
     onStopCar: handleStop,
-    transitionEnabled,
-    position,
+    animation,
   };
 };

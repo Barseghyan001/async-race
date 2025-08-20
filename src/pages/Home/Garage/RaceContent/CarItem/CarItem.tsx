@@ -9,22 +9,22 @@ import { useControlCars } from './hooks.ts';
 const CarItem: FC<Props> = ({ name, color, id }) => {
   const {
     distance,
-    velocity,
+    carRef,
+    liRef,
     allCarsStarted,
     selectedId,
     onStart,
     onRemoveCar,
     onSelectCar,
     onStopCar,
-    position,
-    transitionEnabled,
+    animation,
   } = useControlCars({ name, id, color });
 
   const disabledStartButton = disabledButton({ type: 'start', id, allCarsStarted, selectedId });
   const disabledStopButton = disabledButton({ type: 'stop', id, allCarsStarted, selectedId });
 
   return (
-    <li className={styles.item}>
+    <li ref={liRef} className={styles.item}>
       <div className={styles.buttonControllers}>
         <Button type="outline" onClick={onSelectCar}>
           select
@@ -40,10 +40,11 @@ const CarItem: FC<Props> = ({ name, color, id }) => {
         </Button>
       </div>
       <div
-        className={styles.icon}
+        ref={carRef}
+        className={styles.car}
         style={{
-          transform: `translateX(${position}px)`,
-          transition: transitionEnabled ? `transform ${distance / velocity}s linear` : 'none',
+          transform: animation ? `translateX(${distance}px)` : 'translateX(0)',
+          transition: `transform ${2}s linear`,
         }}
       >
         <CarSvg style={{ color }} />
