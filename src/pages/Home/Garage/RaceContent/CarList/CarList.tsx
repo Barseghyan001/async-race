@@ -17,15 +17,23 @@ const CarList: FC<Props> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const cars = useAppSelector(carsSliceSelectors.selectorCar);
   const winner = useAppSelector(winnersSliceSelectors.selectorWinner);
+  const winners = useAppSelector(winnersSliceSelectors.selectorWinners);
 
   const currentWinner = cars.find(item => item.id === winner?.id);
 
   const dispatch = useAppDispatch();
-
   useEffect(() => {
-    if (winner?.id) {
-      setOpen(true);
-      dispatch(updateWinnerThunk(winner));
+    if (!winner?.id) return;
+    const existingWinner = winners.find(w => w.id === winner?.id);
+    setOpen(true);
+    if (existingWinner) {
+      dispatch(
+        updateWinnerThunk({
+          ...existingWinner,
+          wins: existingWinner.wins + 1,
+          time: Math.min(existingWinner.time, winner.time),
+        })
+      );
     }
   }, [winner]);
 

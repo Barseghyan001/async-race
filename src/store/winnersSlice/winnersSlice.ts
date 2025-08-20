@@ -33,9 +33,8 @@ const winnersSlice = createSlice({
         state.winner = action.payload;
       })
       .addCase(updateWinnerThunk.fulfilled, (state, action) => {
-        state.winners = state.winners.map(winner =>
-          winner.id === action.payload.id ? action.payload : winner
-        );
+        const updatedCar = state.winners.find(winner => winner.id === action.payload.id);
+        state.winners = state.winners.map(item => ({ ...item, updatedCar }));
       }),
 });
 

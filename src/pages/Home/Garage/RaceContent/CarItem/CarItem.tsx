@@ -44,7 +44,7 @@ const CarItem: FC<Props> = ({ name, color, id }) => {
         className={styles.car}
         style={{
           transform: animation ? `translateX(${distance}px)` : 'translateX(0)',
-          transition: `transform ${2}s linear`,
+          transition: animation ? `transform ${2}s linear` : 'none',
         }}
       >
         <CarSvg style={{ color }} />

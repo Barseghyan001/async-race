@@ -103,8 +103,8 @@ export const getWinnerThunk = createAsyncThunk<IWinners, number, { rejectValue: 
   }
 );
 
-export const updateWinnerThunk = createAsyncThunk<IWinners, IWinners, { rejectValue: string }>(
-  'winners/update',
+export const updateWinnerThunk = createAsyncThunk<IWinners, Winner, { rejectValue: string }>(
+  'winner/update',
   async (winner, { rejectWithValue }) => {
     try {
       const resp = await fetch(`${HOST}winners/${winner.id}`, {
