@@ -3,8 +3,8 @@ import type { IWinners, Winner } from './initialState.ts';
 import { getCarsThunk } from '../carsSlice/asyncThunks.ts';
 
 const MAX_WINNERS_LIMIT = 100;
-
-const PORT = import.meta.env.VITE_SERVER_REQUEST_PORT || 3000;
+const DEFAULT_PORT = 3000;
+const PORT = import.meta.env.VITE_SERVER_REQUEST_PORT || DEFAULT_PORT;
 const HOST = `http://localhost:${PORT}/`;
 
 export const getWinnersThunk = createAsyncThunk<

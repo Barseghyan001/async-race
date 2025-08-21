@@ -8,6 +8,7 @@ import { getCarsThunk } from '../../../../store/carsSlice/asyncThunks.ts';
 import Divider from '../../../../components/ui/Divider/Divider.tsx';
 import { Pagination } from '../../../../components/ui/Pagination/Pagination.tsx';
 import Empty from '../../../../components/ui/Empty/Empty.tsx';
+const PAGE_COUNT = 7;
 
 const RaceContent = () => {
   const [page, setPage] = useState<number>(0);
@@ -16,7 +17,7 @@ const RaceContent = () => {
   const dispatch = useAppDispatch();
 
   const displayedCars = useMemo(() => {
-    return cars.slice(page * 7, page * 7 + 7);
+    return cars.slice(page * PAGE_COUNT, page * PAGE_COUNT + PAGE_COUNT);
   }, [cars, page]);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const RaceContent = () => {
         <section className={styles.row}>
           <h1>Garage ({cars.length})</h1>
           <Pagination
-            pageCount={Math.ceil(cars.length / 7)}
+            pageCount={Math.ceil(cars.length / PAGE_COUNT)}
             forcePage={page}
             onPageChange={handlePageChange}
           />

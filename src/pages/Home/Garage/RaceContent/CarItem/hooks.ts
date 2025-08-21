@@ -15,6 +15,10 @@ import {
 } from '../../../../../store/winnersSlice/asyncThunks.ts';
 import type { Props } from './CarItem.types.ts';
 
+const DISTANCE_NUMBER = 130;
+const STARTED_CAR_COUNT = 7;
+
+// eslint-disable-next-line max-lines-per-function
 export const useControlCars = ({ id, name, color }: Props) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [animation, setAnimation] = useState<boolean>(false);
@@ -26,7 +30,7 @@ export const useControlCars = ({ id, name, color }: Props) => {
   const allCarsStarted = useAppSelector(carsSliceSelectors.selectorAllCarsStarted);
   const cars = useAppSelector(carsSliceSelectors.selectorCar);
 
-  const distance = Math.floor(position - 130);
+  const distance = Math.floor(position - DISTANCE_NUMBER);
 
   const handleRemoveCar = () => {
     dispatch(deleteCarThunk(id))
@@ -61,7 +65,9 @@ export const useControlCars = ({ id, name, color }: Props) => {
 
   const handleStart = async () => {
     if (allCarsStarted) {
-      await Promise.all(cars.map(car => dispatch(engineStartThunk(car.id))));
+      await Promise.all(
+        cars.slice(0, STARTED_CAR_COUNT).map(car => dispatch(engineStartThunk(car.id)))
+      );
     } else {
       dispatch(engineStartThunk(id));
     }

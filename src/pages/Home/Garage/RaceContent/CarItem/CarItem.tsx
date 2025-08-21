@@ -1,10 +1,11 @@
 import { type FC } from 'react';
 import type { Props } from './CarItem.types.ts';
 import styles from './CarItem.module.css';
-import Button from '../../../../../components/ui/Button/Button.tsx';
 import { CarSvg } from '../../../../../assets/images';
 import { disabledButton } from './helpers.ts';
 import { useControlCars } from './hooks.ts';
+import { SECONDS_ANIMATION } from './constants.ts';
+import ButtonControllers from './ButtonControllers/ButtonControllers.tsx';
 
 const CarItem: FC<Props> = ({ name, color, id }) => {
   const {
@@ -25,26 +26,20 @@ const CarItem: FC<Props> = ({ name, color, id }) => {
 
   return (
     <li ref={liRef} className={styles.item}>
-      <div className={styles.buttonControllers}>
-        <Button type="outline" onClick={onSelectCar}>
-          select
-        </Button>
-        <Button type="outline" onClick={onStart} disabled={disabledStartButton}>
-          a
-        </Button>
-        <Button type="outline" onClick={onRemoveCar}>
-          remove
-        </Button>
-        <Button type="outline" onClick={onStopCar} disabled={disabledStopButton}>
-          b
-        </Button>
-      </div>
+      <ButtonControllers
+        onStart={onStart}
+        onRemoveCar={onRemoveCar}
+        onSelectCar={onSelectCar}
+        onStopCar={onStopCar}
+        disabledStartButton={disabledStartButton}
+        disabledStopButton={disabledStopButton}
+      />
       <div
         ref={carRef}
         className={styles.car}
         style={{
           transform: animation ? `translateX(${distance}px)` : 'translateX(0)',
-          transition: animation ? `transform ${2}s linear` : 'none',
+          transition: animation ? `transform ${SECONDS_ANIMATION}s linear` : 'none',
         }}
       >
         <CarSvg style={{ color }} />

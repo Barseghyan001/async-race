@@ -1,47 +1,16 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import CarItem from '../CarItem/CarItem.tsx';
 import type { Props } from './CarList.types.ts';
 import styles from './CarList.module.css';
 import { createPortal } from 'react-dom';
-import { useAppDispatch, useAppSelector } from '../../../../../hooks/useReduxHooks.ts';
-import {
-  winnersActions,
-  winnersSliceSelectors,
-} from '../../../../../store/winnersSlice/winnersSlice.ts';
 import { finishImage } from '../../../../../assets/images';
 import Modal from '../../../../../components/ui/Modal/Modal.tsx';
-import { updateWinnerThunk } from '../../../../../store/winnersSlice/asyncThunks.ts';
-import { carsSliceSelectors } from '../../../../../store/carsSlice/carsSlice.ts';
+import { useShowWinner } from './hooks.ts';
+
+const FIXED_NUMBER = 2;
 
 const CarList: FC<Props> = ({ data }) => {
-  const [open, setOpen] = useState(false);
-  const cars = useAppSelector(carsSliceSelectors.selectorCar);
-  const winner = useAppSelector(winnersSliceSelectors.selectorWinner);
-  const winners = useAppSelector(winnersSliceSelectors.selectorWinners);
-
-  const currentWinner = cars.find(item => item.id === winner?.id);
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!winner?.id) return;
-    const existingWinner = winners.find(w => w.id === winner?.id);
-    setOpen(true);
-    if (existingWinner) {
-      dispatch(
-        updateWinnerThunk({
-          ...existingWinner,
-          wins: existingWinner.wins + 1,
-          time: Math.min(existingWinner.time, winner.time),
-        })
-      );
-    }
-  }, [winner]);
-
-  const handleClose = () => {
-    setOpen(false);
-    dispatch(winnersActions.setWinner({}));
-    window.location.reload();
-  };
+  const { open, onClose, currentWinner, winner } = useShowWinner();
 
   return (
     <>
@@ -55,10 +24,10 @@ const CarList: FC<Props> = ({ data }) => {
       </div>
       {open &&
         createPortal(
-          <Modal onClose={handleClose} open={open}>
+          <Modal onClose={onClose} open={open}>
             <h5>🏆 Winner!</h5>
             <p>{currentWinner?.name} reached the finish line!</p>
-            <p>Time: {winner?.time.toFixed(2)}s</p>
+            <p>Time: {winner?.time.toFixed(FIXED_NUMBER)}s</p>
           </Modal>,
           document.body
         )}

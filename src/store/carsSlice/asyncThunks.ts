@@ -2,7 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { EngineData } from './initialState.ts';
 
 const MAX_CARS_LIMIT = 1000;
-const PORT = import.meta.env.VITE_SERVER_REQUEST_PORT || 3000;
+const DEFAULT_PORT = 3000;
+const PORT = import.meta.env.VITE_SERVER_REQUEST_PORT || DEFAULT_PORT;
 const HOST = `http://localhost:${PORT}/`;
 
 export interface Car {
